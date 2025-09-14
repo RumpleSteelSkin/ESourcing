@@ -3,7 +3,7 @@ using ESourcing.Products.Entities;
 using ESourcing.Products.Repositories.Interfaces;
 using MongoDB.Driver;
 
-namespace ESourcing.Products.Repositories.Concrete;
+namespace ESourcing.Products.Repositories.Concretes;
 
 public class ProductRepository(IProductContext context) : IProductRepository
 {

@@ -1,0 +1,38 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  esourcing.products:
+    build:
+      context: "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing"
+      dockerfile: "ESourcing.Products/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/ESourcing.Products.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "esourcingproducts:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing\\ESourcing.Products:/app:rw"
+    - "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing:/src:rw"
+    - "C:\\Users\\QWERTY_VX1\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"
+  esourcing.sourcing:
+    build:
+      context: "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing"
+      dockerfile: "Esourcing.Sourcing/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/ESourcing.Sourcing.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "esourcingsourcing:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing\\ESourcing.Sourcing:/app:rw"
+    - "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing:/src:rw"
+    - "C:\\Users\\QWERTY_VX1\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"

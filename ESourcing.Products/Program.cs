@@ -1,6 +1,6 @@
 using ESourcing.Products.Data.Concretes;
 using ESourcing.Products.Data.Interfaces;
-using ESourcing.Products.Repositories.Concrete;
+using ESourcing.Products.Repositories.Concretes;
 using ESourcing.Products.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
