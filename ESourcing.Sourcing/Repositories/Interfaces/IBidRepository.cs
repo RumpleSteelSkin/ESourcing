@@ -7,5 +7,5 @@ public interface IBidRepository
     Task SendBidAsync(Bid bid);
     Task<IEnumerable<Bid>> GetByAuctionIdAsync(string id);
     Task<IEnumerable<Bid>> GetAllByAuctionIdAsync(string id);
-    Task<Bid> GetWinnerBidAsync(string id);
+    Task<Bid?> GetWinnerBidAsync(string id);
 }

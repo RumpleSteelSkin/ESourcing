@@ -31,7 +31,7 @@ public class BidRepository(ISourcingContext context) : IBidRepository
             .ToListAsync();
     }
 
-    public async Task<Bid> GetWinnerBidAsync(string id)
+    public async Task<Bid?> GetWinnerBidAsync(string id)
     {
         var bids = await GetAllByAuctionIdAsync(id);
         return bids.OrderByDescending(a => a.Price).FirstOrDefault()

@@ -8,13 +8,13 @@ services:
     ports:
       - "27017:27017"
   
-  #  rabbitmq:
-  #    image: rabbitmq:3-management
-  #    container_name: rabbitmq
-  #    restart: always
-  #    ports:
-  #       - "5672:5672"
-  #       - "15672:15672"
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
   
   #  sourcingsqldb:
   #    image: mcr.microsoft.com/mssql/server
@@ -51,8 +51,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "SourcingDatabaseSettings:ConnectionString=mongodb://sourcingdb:27017"
+      - "EventBus:HostName=rabbitmq"
     depends_on:
       - sourcingdb
+      - rabbitmq
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
