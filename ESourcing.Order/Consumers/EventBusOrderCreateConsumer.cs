@@ -13,41 +13,45 @@ namespace ESourcing.Order.Consumers;
 
 public class EventBusOrderCreateConsumer(
     IRabbitMQPersistentConnection persistentConnection,
-    IMediator mediator,
-    IMapper mapper)
+    IServiceScopeFactory serviceScopeFactory,
+    IMapper mapper,
+    ILogger<EventBusOrderCreateConsumer> logger)
 {
     public void Consume()
     {
         if (!persistentConnection.IsConnected)
             persistentConnection.TryConnect();
-
         var channel = persistentConnection.CreateModel();
-        channel.QueueDeclare(queue: EventBusConstants.OrderCreateQueue, durable: false, exclusive: false,
+        channel.QueueDeclare(queue: EventBusConstants.OrderCreateQueue, durable: true, exclusive: false,
             autoDelete: false, arguments: null);
-
         var consumer = new EventingBasicConsumer(channel);
-
-        consumer.Received += ReceivedEvent!;
-
-        channel.BasicConsume(queue: EventBusConstants.OrderCreateQueue, autoAck: true, consumer: consumer);
-    }
-
-    private void ReceivedEvent(object sender, BasicDeliverEventArgs e)
-    {
-        var message = Encoding.UTF8.GetString(e.Body.Span);
-        var @event = JsonConvert.DeserializeObject<OrderCreateEvent>(message);
-
-        if (e.RoutingKey != EventBusConstants.OrderCreateQueue) return;
-        var command = mapper.Map<OrderCreateCommand>(@event);
-
-        command.CreatedAt = DateTime.Now;
-        if (@event != null)
+        consumer.Received += async (model, ea) =>
         {
-            command.TotalPrice = @event.Quantity * @event.Price;
-            command.UnitPrice = @event.Price;
-        }
+            try
+            {
+                var orderEvent = JsonConvert.DeserializeObject<OrderCreateEvent>(Encoding.UTF8.GetString(ea.Body.Span));
+                if (orderEvent is null)
+                {
+                    logger.LogError("EventBusOrderCreateConsumer received null event");
+                    return;
+                }
 
-        mediator.Send(command).Wait();
+                using var scope = serviceScopeFactory.CreateScope();
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                var command = mapper.Map<OrderCreateCommand>(orderEvent);
+                command.CreatedAt = DateTime.Now;
+                command.TotalPrice = orderEvent.Quantity * orderEvent.Price;
+                command.UnitPrice = orderEvent.Price;
+                await mediator.Send(command);
+                channel.BasicAck(ea.DeliveryTag, multiple: false);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "EventBusOrderCreateConsumer received exception");
+                channel.BasicNack(ea.DeliveryTag, multiple: false, requeue: true);
+            }
+        };
+        channel.BasicConsume(queue: EventBusConstants.OrderCreateQueue, autoAck: false, consumer: consumer);
     }
 
     public void Disconnect()
