@@ -1,5 +1,23 @@
 # This is a generated file. Not intended for manual editing.
 services:
+  esourcing.apigateway:
+    build:
+      context: "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing"
+      dockerfile: "ESourcing.APIGateway/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/ESourcing.APIGateway.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "esourcingapigateway:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing\\ESourcing.APIGateway:/app:rw"
+    - "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing:/src:rw"
+    - "C:\\Users\\QWERTY_VX1\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"
   esourcing.order:
     build:
       context: "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing"

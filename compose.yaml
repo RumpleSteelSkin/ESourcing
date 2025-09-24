@@ -80,20 +80,20 @@ services:
     ports:
       - "5003:8080"
   
-  #  esourcing.apigateway:
-  #    image: ${DOCKER_REGISTRY-}esourcingapigateway
-  #    build:
-  #      context: .
-  #      dockerfile: ESourcing.APIGateway/Dockerfile
-  #    container_name: esourcingapigateway
-  #    environment:
-  #      - ASPNETCORE_ENVIRONMENT=Development
-  #    depends_on:
-  #      - esourcing.products
-  #      - esourcing.sourcing
-  #      - esourcing.order
-  #    ports:
-  #      - "5000:8080"
-  #    volumes:
-  #      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
-  #      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+  esourcing.apigateway:
+    image: ${DOCKER_REGISTRY-}esourcingapigateway
+    build:
+      context: .
+      dockerfile: ESourcing.APIGateway/Dockerfile
+    container_name: esourcingapigateway
+    environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - esourcing.products
+      - esourcing.sourcing
+      - esourcing.order
+    ports:
+      - "5000:8080"
+    volumes:
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/

@@ -1,0 +1,80 @@
+{
+  "Routes": [
+    //Product API
+    {
+      "DownstreamPathTemplate": "/api/Product/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "esourcingproducts",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "UpstreamPathTemplate": "/Product/{everything}"
+    },
+    //Sourcing API
+    //Auction
+    {
+      "DownstreamPathTemplate": "/api/Auction/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "esourcingsourcing",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "UpstreamPathTemplate": "/Auction/{everything}"
+    },
+    //Bid
+    {
+      "DownstreamPathTemplate": "/api/Bid/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "esourcingsourcing",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "UpstreamPathTemplate": "/Bid/{everything}"
+    },
+    //Order API
+    {
+      "DownstreamPathTemplate": "/api/Order/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "esourcingorder",
+          "Port": 8080
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "UpstreamPathTemplate": "/Order/{everything}"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000"
+  }
+}
