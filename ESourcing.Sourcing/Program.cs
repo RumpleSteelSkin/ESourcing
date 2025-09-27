@@ -1,6 +1,7 @@
 using System.Reflection;
 using ESourcing.Sourcing.Data.Concretes;
 using ESourcing.Sourcing.Data.Interfaces;
+using ESourcing.Sourcing.Hubs;
 using ESourcing.Sourcing.Repositories.Concretes;
 using ESourcing.Sourcing.Repositories.Interfaces;
 using EventBusRabbitMQ;
@@ -16,6 +17,14 @@ builder.Services.AddTransient<ISourcingContext, SourcingContext>();
 builder.Services.AddTransient<IAuctionRepository, AuctionRepository>();
 builder.Services.AddTransient<IBidRepository, BidRepository>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", corsPolicyBuilder =>
+{
+    corsPolicyBuilder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+}));
+
 #region EventBus
 
 builder.Services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
@@ -34,7 +43,10 @@ builder.Services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
 });
 
 builder.Services.AddSingleton<EventBusRabbitMQProducer>();
+
 #endregion
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -43,6 +55,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseRouting();
+app.UseCors("CorsPolicy");
+
+app.UseAuthorization();
+
+app.MapHub<AuctionHub>("/auctionhub");
 
 app.UseHttpsRedirection();
 app.MapControllers();

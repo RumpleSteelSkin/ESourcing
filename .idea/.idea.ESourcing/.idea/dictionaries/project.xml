@@ -2,13 +2,22 @@
   <dictionary name="project">
     <words>
       <w>apigateway</w>
+      <w>auctionhub</w>
+      <w>colorpicker</w>
+      <w>daterangepicker</w>
+      <w>duallistbox</w>
       <w>esourcingapigateway</w>
       <w>esourcingorder</w>
       <w>esourcingproducts</w>
       <w>esourcingsourcing</w>
+      <w>icheck</w>
+      <w>inputmask</w>
       <w>sourcingdb</w>
       <w>sourcingsqldb</w>
+      <w>tempusdominus</w>
+      <w>toastr</w>
       <w>usersecrets</w>
+      <w>vmap</w>
     </words>
   </dictionary>
 </component>
