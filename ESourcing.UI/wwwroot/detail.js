@@ -93,7 +93,6 @@ function SendCompleteBid(model) {
         success: function (response) {
             if (response) {
                 console.log("Auction completed successfully");
-                location.href = "http://localhost:5200/Auction/Index";
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {

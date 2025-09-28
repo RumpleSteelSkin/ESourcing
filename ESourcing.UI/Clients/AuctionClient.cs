@@ -10,10 +10,10 @@ public class AuctionClient
 {
     private HttpClient Client { get; }
 
-    public AuctionClient(HttpClient client)
+    public AuctionClient(HttpClient client,IConfiguration configuration)
     {
         Client = client;
-        Client.BaseAddress = new Uri(CommonInfo.BaseAddress);
+        Client.BaseAddress = new Uri(configuration["BaseAddress"]!);
     }
 
     public async Task<Result<List<AuctionViewModel>>> GetAuctions()

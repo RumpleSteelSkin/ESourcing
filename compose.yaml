@@ -103,3 +103,22 @@ services:
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
+
+  esourcing.ui:
+    image: ${DOCKER_REGISTRY-}esourcingui
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ESourcing.UI/Dockerfile
+    container_name: esourcingui
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:IdentityConnection=Server=sourcingsqldb;Database=WebAppDb;User Id=sa;Password=!}W^eG3802,[;TrustServerCertificate=True;"
+      - "BaseAddress=http://esourcingapigateway:8080"
+    depends_on:
+      - sourcingsqldb
+    volumes:
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+    ports:
+      - "8080:8080"

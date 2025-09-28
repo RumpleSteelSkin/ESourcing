@@ -21,6 +21,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
         opt.Password.RequireDigit = false;
         opt.Password.RequireUppercase = false;
         opt.Password.RequireLowercase = false;
+        opt.User.AllowedUserNameCharacters = "qwertyuıopğüasdfghjklşi,<zxcvbnmöç. QWERTYUIOPĞÜASDFGHJKLŞİZXCVBNMÖÇ";
     }).AddDefaultTokenProviders()
     .AddEntityFrameworkStores<WebAppContext>();
 
@@ -32,7 +33,6 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddSession(opt => { opt.IdleTimeout = TimeSpan.FromMinutes(20); });
 
-
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 builder.Services.AddHttpClient();
@@ -40,6 +40,16 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ProductClient>();
 builder.Services.AddHttpClient<AuctionClient>();
 builder.Services.AddHttpClient<BidClient>();
+
+
+builder.Services.AddAuthentication().AddGoogle(opt =>
+{
+    opt.ClientSecret = builder.Configuration["ExternalOAuths:Google:Secret"] ?? string.Empty;
+    opt.ClientId = builder.Configuration["ExternalOAuths:Google:ID"] ?? string.Empty;
+});
+
+
+
 
 var app = builder.Build();
 

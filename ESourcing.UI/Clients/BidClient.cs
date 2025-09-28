@@ -9,10 +9,10 @@ public class BidClient
 {
     private HttpClient Client { get; }
 
-    public BidClient(HttpClient client)
+    public BidClient(HttpClient client,IConfiguration configuration)
     {
         Client = client;
-        Client.BaseAddress = new Uri(CommonInfo.BaseAddress);
+        Client.BaseAddress = new Uri(configuration["BaseAddress"]!);
     }
 
     public async Task<Result<List<BidViewModel>>> GelAllBidsByAuctionId(string id)

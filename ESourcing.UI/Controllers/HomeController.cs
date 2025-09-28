@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ESourcing.Core.Entities;
 using ESourcing.UI.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -83,6 +84,48 @@ public class HomeController(UserManager<AppUser> userManager, SignInManager<AppU
 
         return View(signupModel);
     }
+
+    public IActionResult GoogleLogin(string returnUrl)
+    {
+        var redirectUrl = Url.Action("SocialMediaLogin", "Home", new { returnUrl });
+        var properties = signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+        return new ChallengeResult("Google", properties);
+    }
+
+    public async Task<IActionResult> SocialMediaLogin(string? returnUrl)
+    {
+        returnUrl ??= Url.Content("~/");
+
+        var loginInfo = await signInManager.GetExternalLoginInfoAsync();
+        if (loginInfo == null)
+            return RedirectToAction("Signup");
+
+        var result = await signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, true);
+        if (result.Succeeded)
+            return LocalRedirect(returnUrl);
+
+        if (!loginInfo.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+            return RedirectToAction("Signup");
+
+        var user = new AppUser
+        {
+            Email = loginInfo.Principal.FindFirstValue(ClaimTypes.Email),
+            UserName = loginInfo.Principal.FindFirstValue(ClaimTypes.Name),
+            FirstName = loginInfo.Principal.FindFirstValue(ClaimTypes.GivenName),
+            LastName = loginInfo.Principal.FindFirstValue(ClaimTypes.Surname),
+            PhoneNumber = loginInfo.Principal.FindFirstValue(ClaimTypes.MobilePhone)
+        };
+
+        var createResult = await userManager.CreateAsync(user);
+        if (!createResult.Succeeded) return RedirectToAction("Signup");
+
+        var identityLogin = await userManager.AddLoginAsync(user, loginInfo);
+        if (!identityLogin.Succeeded) return RedirectToAction("Signup");
+
+        await signInManager.SignInAsync(user, true);
+        return LocalRedirect(returnUrl);
+    }
+
 
     public IActionResult Logout()
     {

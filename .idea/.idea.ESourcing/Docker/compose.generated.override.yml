@@ -72,3 +72,22 @@ services:
     - "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing:/src:rw"
     - "C:\\Users\\QWERTY_VX1\\.nuget\\packages:/home/app/.nuget/packages"
     working_dir: "/app"
+  esourcing.ui:
+    build:
+      context: "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing"
+      dockerfile: "ESourcing.UI/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/ESourcing.UI.dll"
+    environment:
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net8.0/ESourcing.UI.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "esourcingui:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing\\ESourcing.UI:/app:rw"
+    - "C:\\Users\\QWERTY_VX1\\RiderProjects\\ESourcing:/src:rw"
+    - "C:\\Users\\QWERTY_VX1\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"

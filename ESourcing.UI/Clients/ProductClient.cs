@@ -9,10 +9,10 @@ public class ProductClient
 {
     private HttpClient Client { get; }
 
-    public ProductClient(HttpClient client)
+    public ProductClient(HttpClient client, IConfiguration configuration)
     {
         Client = client;
-        Client.BaseAddress = new Uri(CommonInfo.BaseAddress);
+        Client.BaseAddress = new Uri(configuration["BaseAddress"]!);
     }
 
     public async Task<Result<List<ProductViewModel>>> GetProducts()
