@@ -19,6 +19,7 @@ services:
   sourcingsqldb:
     image: mcr.microsoft.com/mssql/server
     container_name: sourcingsqldb
+    restart: on-failure
     ports:
       - "1455:1433"
     environment:
@@ -27,6 +28,7 @@ services:
 
   esourcing.products:
     image: ${DOCKER_REGISTRY-}esourcingproducts
+    restart: on-failure
     build:
       context: .
       dockerfile: ESourcing.Products/Dockerfile
@@ -44,6 +46,7 @@ services:
 
   esourcing.sourcing:
     image: ${DOCKER_REGISTRY-}esourcingsourcing
+    restart: on-failure
     build:
       context: .
       dockerfile: Esourcing.Sourcing/Dockerfile
@@ -63,6 +66,7 @@ services:
   
   esourcing.order:
     image: ${DOCKER_REGISTRY-}esourcingorder
+    restart: on-failure
     build:
       context: .
       dockerfile: ESourcing.Order/Dockerfile
@@ -82,12 +86,14 @@ services:
   
   esourcing.apigateway:
     image: ${DOCKER_REGISTRY-}esourcingapigateway
+    restart: always
     build:
       context: .
       dockerfile: ESourcing.APIGateway/Dockerfile
     container_name: esourcingapigateway
     environment:
        - ASPNETCORE_ENVIRONMENT=Development
+       - "OcelotFileName=DockerOcelot.json"
     depends_on:
       - esourcing.products
       - esourcing.sourcing

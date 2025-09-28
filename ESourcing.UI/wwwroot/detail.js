@@ -1,5 +1,5 @@
 ﻿
-var connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:8001/auctionhub").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:5002/auctionhub").build();
 var auctionId = document.getElementById("AuctionId").value;
 
 document.getElementById("sendButton").disabled = true;
@@ -64,8 +64,8 @@ function addBidToTable(user, bid) {
 }
 
 function SendBid(model) {
+    console.log("SendBid");
     $.ajax({
-
         url: "/Auction/SendBid",
         type: "POST",
         data: model,
@@ -93,7 +93,7 @@ function SendCompleteBid(model) {
         success: function (response) {
             if (response) {
                 console.log("Auction completed successfully");
-                location.href = "https://localhost:44398/Auction/Index";
+                location.href = "http://localhost:5200/Auction/Index";
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {

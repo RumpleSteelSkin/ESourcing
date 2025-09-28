@@ -17,11 +17,11 @@ public class BidClient
 
     public async Task<Result<List<BidViewModel>>> GelAllBidsByAuctionId(string id)
     {
-        var response = await Client.GetAsync("/Bid/GetAllBidsByAuctionId/" + id);
+        var response = await Client.GetAsync("/Bid/GetBidsByAuctionId/" + id);
         if (!response.IsSuccessStatusCode) return new Result<List<BidViewModel>>(false, ResultConstant.RecordNotFound);
         var responseData = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<List<BidViewModel>>(responseData);
-        return result.Any()
+        return result != null && result.Count != 0
             ? new Result<List<BidViewModel>>(true, ResultConstant.RecordFound, result.ToList())
             : new Result<List<BidViewModel>>(false, ResultConstant.RecordNotFound);
     }
@@ -31,7 +31,7 @@ public class BidClient
         var dataAsString = JsonConvert.SerializeObject(model);
         var content = new StringContent(dataAsString);
         content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-        var response = await Client.PostAsync("/SendBid", content);
+        var response = await Client.PostAsync("/Bid/SendBid", content);
         if (!response.IsSuccessStatusCode) return new Result<string>(false, ResultConstant.RecordCreateNotSuccessfully);
         var responseData = await response.Content.ReadAsStringAsync();
         return new Result<string>(true, ResultConstant.RecordCreateSuccessfully, responseData);

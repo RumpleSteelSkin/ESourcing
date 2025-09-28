@@ -50,6 +50,8 @@ public class HomeController(UserManager<AppUser> userManager, SignInManager<AppU
     [HttpPost]
     public async Task<IActionResult> Signup(AppUserViewModel signupModel)
     {
+        if (signupModel.Email != null && await userManager.FindByEmailAsync(signupModel.Email) != null)
+            return LocalRedirect(Url.Content("~/"));
         if (!ModelState.IsValid) return View(signupModel);
         var usr = new AppUser
         {

@@ -42,6 +42,18 @@ builder.Services.AddHttpClient<AuctionClient>();
 builder.Services.AddHttpClient<BidClient>();
 
 var app = builder.Build();
+
+#region Auto Migration And Seed
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<WebAppContext>();
+    await context.Database.MigrateAsync();
+    await WebAppContextSeed.SeedAsync(context, scope.ServiceProvider.GetRequiredService<ILoggerFactory>());
+}
+
+#endregion
+
 app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();

@@ -17,13 +17,18 @@ builder.Services.AddTransient<ISourcingContext, SourcingContext>();
 builder.Services.AddTransient<IAuctionRepository, AuctionRepository>();
 builder.Services.AddTransient<IBidRepository, BidRepository>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", corsPolicyBuilder =>
+#region CORS Services
+
+builder.Services.AddCors(opt =>
 {
-    corsPolicyBuilder.AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
-}));
+    opt.AddPolicy("AllowAll", policy =>
+        policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .SetIsOriginAllowed((host) => true)
+            .AllowCredentials());
+});
+
+#endregion
 
 #region EventBus
 
@@ -57,7 +62,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-app.UseCors("CorsPolicy");
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
